@@ -1,0 +1,395 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: fleet
+    chart: fleet
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+  name: fleet
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: {{ .Values.replicas }}
+  selector:
+    matchLabels:
+      app: fleet
+      chart: fleet
+      heritage: {{ .Release.Service }}
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+{{- with .Values.podAnnotations }}
+      annotations:
+{{- toYaml . | trim | nindent 8 }}
+{{- end }}
+      labels:
+        app: fleet
+        chart: fleet
+        heritage: {{ .Release.Service }}
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+      - name: fleet
+        command: [/usr/bin/fleet]
+        args: ["serve"]
+        image: fleetdm/fleet:{{ .Values.imageTag }}
+        ports:
+        - name: fleet
+          containerPort: {{ .Values.fleet.listenPort }}
+        resources:
+          limits:
+            cpu: {{ .Values.resources.limits.cpu }}
+            memory: {{ .Values.resources.limits.memory }}
+          requests:
+            cpu: {{ .Values.resources.requests.cpu }}
+            memory: {{ .Values.resources.requests.memory }}
+        env:
+          ## BEGIN FLEET SECTION
+          - name: FLEET_VULNERABILITIES_DATABASES_PATH
+            value: /tmp/vuln # /tmp might not work on all cloud providers by default
+          - name: FLEET_SERVER_ADDRESS
+            value: "0.0.0.0:{{ .Values.fleet.listenPort }}"
+          - name: FLEET_AUTH_BCRYPT_COST
+            value: "{{ .Values.fleet.auth.bcryptCost }}"
+          - name: FLEET_AUTH_SALT_KEY_SIZE
+            value: "{{ .Values.fleet.auth.saltKeySize }}"
+          - name: FLEET_APP_TOKEN_KEY_SIZE
+            value: "{{ .Values.fleet.app.tokenKeySize }}"
+          - name: FLEET_APP_TOKEN_VALIDITY_PERIOD
+            value: "{{ .Values.fleet.app.inviteTokenValidityPeriod }}"
+          - name: FLEET_SESSION_KEY_SIZE
+            value: "{{ .Values.fleet.session.keySize }}"
+          - name: FLEET_SESSION_DURATION
+            value: "{{ .Values.fleet.session.duration }}"
+          - name: FLEET_LOGGING_DEBUG
+            value: "{{ .Values.fleet.logging.debug }}"
+          - name: FLEET_LOGGING_JSON
+            value: "{{ .Values.fleet.logging.json }}"
+          - name: FLEET_LOGGING_DISABLE_BANNER
+            value: "{{ .Values.fleet.logging.disableBanner }}"
+          - name: FLEET_SERVER_TLS
+            value: "{{ .Values.fleet.tls.enabled }}"
+          {{- if .Values.fleet.tls.enabled }}
+          - name: FLEET_SERVER_TLS_COMPATIBILITY
+            value: "{{ .Values.fleet.tls.compatibility }}"
+          - name: FLEET_SERVER_CERT
+            value: "/secrets/tls/{{ .Values.fleet.tls.certSecretKey }}"
+          - name: FLEET_SERVER_KEY
+            value: "/secrets/tls/{{ .Values.fleet.tls.keySecretKey }}"
+          {{- end }}
+          {{- if ne .Values.fleet.carving.s3.bucketName "" }}
+          - name: FLEET_S3_BUCKET
+            value: "{{ .Values.fleet.carving.s3.bucketName }}"
+          - name: FLEET_S3_PREFIX
+            value: "{{ .Values.fleet.carving.s3.prefix }}"
+          {{- if ne .Values.fleet.carving.s3.accessKeyID "" }}
+          - name: FLEET_S3_ACCESS_KEY_ID
+            value: "{{ .Values.fleet.carving.s3.accessKeyID }}"
+          - name: FLEET_S3_SECRET_ACCESS_KEY
+            valueFrom:
+              secretKeyRef:
+                name: "{{ .Values.fleet.secretName }}"
+                key: "{{ .Values.fleet.carving.s3.secretKey }}"
+          {{ else }}
+          - name: FLEET_S3_STS_ASSUME_ROLE_ARN
+            value: "{{ .Values.fleet.carving.s3.stsAssumeRoleARN }}"
+          {{- end }}
+          {{- end }}
+          ## END FLEET SECTION
+          ## BEGIN MYSQL SECTION
+          - name: FLEET_MYSQL_ADDRESS
+            value: "{{ .Values.database.address }}"
+          - name: FLEET_MYSQL_DATABASE
+            value: "{{ .Values.database.database }}"
+          - name: FLEET_MYSQL_USERNAME
+            value: "{{ .Values.database.username }}"
+          - name: FLEET_MYSQL_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.database.secretName }}
+                key: {{ .Values.database.passwordKey }}
+          - name: FLEET_MYSQL_MAX_OPEN_CONNS
+            value: "{{ .Values.database.maxOpenConns }}"
+          - name: FLEET_MYSQL_MAX_IDLE_CONNS
+            value: "{{ .Values.database.maxIdleConns }}"
+          - name: FLEET_MYSQL_CONN_MAX_LIFETIME
+            value: "{{ .Values.database.connMaxLifetime }}"
+          {{- if .Values.database.tls.enabled }}
+          {{- if .Values.database.tls.caCertKey }}
+          - name: FLEET_MYSQL_TLS_CA
+            value: "/secrets/mysql/{{ .Values.database.tls.caCertKey }}"
+          {{- end }}
+          {{- if .Values.database.tls.certKey }}
+          - name: FLEET_MYSQL_TLS_CERT
+            value: "/secrets/mysql/{{ .Values.database.tls.certKey }}"
+          {{- end }}
+          {{- if .Values.database.tls.keyKey }}
+          - name: FLEET_MYSQL_TLS_KEY
+            value: "/secrets/mysql/{{ .Values.database.tls.keyKey }}"
+          {{- end }}
+          - name: FLEET_MYSQL_TLS_CONFIG
+            value: "{{ .Values.database.tls.config }}"
+          - name: FLEET_MYSQL_TLS_SERVER_NAME
+            value: "{{ .Values.database.tls.serverName }}"
+          {{- end }}
+          ## END MYSQL SECTION
+          ## BEGIN REDIS SECTION
+          - name: FLEET_REDIS_ADDRESS
+            value: "{{ .Values.cache.address }}"
+          - name: FLEET_REDIS_DATABASE
+            value: "{{ .Values.cache.database }}"
+          {{- if .Values.cache.usePassword }}
+          - name: FLEET_REDIS_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: "{{ .Values.cache.secretName }}"
+                key: "{{ .Values.cache.passwordKey }}"
+          {{- end }}
+          ## END REDIS SECTION
+          ## BEGIN OSQUERY SECTION
+          - name: FLEET_OSQUERY_NODE_KEY_SIZE
+            value: "{{ .Values.osquery.nodeKeySize }}"
+          - name: FLEET_OSQUERY_LABEL_UPDATE_INTERVAL
+            value: "{{ .Values.osquery.labelUpdateInterval }}"
+          - name: FLEET_OSQUERY_DETAIL_UPDATE_INTERVAL
+            value: "{{ .Values.osquery.detailUpdateInterval }}"
+          - name: FLEET_OSQUERY_STATUS_LOG_PLUGIN
+            value: "{{ .Values.osquery.logging.statusPlugin }}"
+          - name: FLEET_OSQUERY_RESULT_LOG_PLUGIN
+            value: "{{ .Values.osquery.logging.resultPlugin }}"
+          {{- if eq .Values.osquery.logging.statusPlugin "filesystem" }}
+          - name: FLEET_FILESYSTEM_STATUS_LOG_FILE
+            value: "/logs/{{ .Values.osquery.logging.filesystem.statusLogFile }}"
+          {{- end }}
+          {{- if eq .Values.osquery.logging.resultPlugin "filesystem" }}
+          - name: FLEET_FILESYSTEM_RESULT_LOG_FILE
+            value: "/logs/{{ .Values.osquery.logging.filesystem.resultLogFile }}"
+          {{- end }}
+          {{- if or (eq .Values.osquery.logging.statusPlugin "filesystem") (eq .Values.osquery.logging.resultPlugin "filesystem") }}
+          - name: FLEET_FILESYSTEM_ENABLE_LOG_ROTATION
+            value: "{{ .Values.osquery.logging.filesystem.enableRotation }}"
+          - name: FLEET_FILESYSTEM_ENABLE_LOG_COMPRESSION
+            value: "{{ .Values.osquery.logging.filesystem.enableCompression }}"
+          {{- end }}
+
+          {{- if or (eq .Values.osquery.logging.statusPlugin "firehose") (eq .Values.osquery.logging.resultPlugin "firehose") }}
+          - name: FLEET_FIREHOSE_REGION
+            value: "{{ .Values.osquery.logging.firehose.region }}"
+          {{- if eq .Values.osquery.logging.statusPlugin "firehose" }}
+          - name: FLEET_FIREHOSE_STATUS_STREAM
+            value: "{{ .Values.osquery.logging.firehose.statusStream }}"
+          {{- end }}
+          {{- if eq .Values.osquery.logging.resultPlugin "firehose" }}
+          - name: FLEET_FIREHOSE_RESULT_STREAM
+            value: "{{ .Values.osquery.logging.firehose.resultStream }}"
+          {{- end }}
+          {{- if ne .Values.osquery.logging.firehose.accessKeyID "" }}
+          - name: FLEET_FIREHOSE_ACCESS_KEY_ID
+            value: "{{ .Values.osquery.logging.firehose.accessKeyID }}"
+          - name: FLEET_FIREHOSE_SECRET_ACCESS_KEY
+            valueFrom:
+              secretKeyRef:
+                name: "{{ .Values.osquery.secretName }}"
+                key: "{{ .Values.osquery.logging.firehose.secretKey }}"
+          {{ else }}
+          - name: FLEET_FIREHOSE_STS_ASSUME_ROLE_ARN
+            value: "{{ .Values.osquery.logging.firehose.stsAssumeRoleARN }}"
+          {{- end }}
+          {{- end }}
+
+          {{- if or (eq .Values.osquery.logging.statusPlugin "kinesis") (eq .Values.osquery.logging.resultPlugin "kinesis") }}
+          - name: FLEET_KINESIS_REGION
+            value: "{{ .Values.osquery.logging.kinesis.region }}"
+          {{- if eq .Values.osquery.logging.statusPlugin "kinesis" }}
+          - name: FLEET_KINESIS_STATUS_STREAM
+            value: "{{ .Values.osquery.logging.kinesis.statusStream }}"
+          {{- end }}
+          {{- if eq .Values.osquery.logging.resultPlugin "kinesis" }}
+          - name: FLEET_KINESIS_RESULT_STREAM
+            value: "{{ .Values.osquery.logging.kinesis.resultStream }}"
+          {{- end }}
+          {{- if ne .Values.osquery.logging.kinesis.accessKeyID "" }}
+          - name: FLEET_KINESIS_ACCESS_KEY_ID
+            value: "{{ .Values.osquery.logging.kinesis.accessKeyID }}"
+          - name: FLEET_KINESIS_SECRET_ACCESS_KEY
+            valueFrom:
+              secretKeyRef:
+                name: "{{ .Values.osquery.secretName }}"
+                key: "{{ .Values.osquery.logging.kinesis.secretKey }}"
+          {{ else }}
+          - name: FLEET_KINESIS_STS_ASSUME_ROLE_ARN
+            value: "{{ .Values.osquery.logging.kinesis.stsAssumeRoleARN }}"
+          {{- end }}
+          {{- end }}
+
+          {{- if or (eq .Values.osquery.logging.statusPlugin "lambda") (eq .Values.osquery.logging.resultPlugin "lambda") }}
+          - name: FLEET_LAMBDA_REGION
+            value: "{{ .Values.osquery.logging.lambda.region }}"
+          {{- if eq .Values.osquery.logging.statusPlugin "lambda" }}
+          - name: FLEET_LAMBDA_STATUS_FUNCTION
+            value: "{{ .Values.osquery.logging.lambda.statusFunction }}"
+          {{- end }}
+          {{- if eq .Values.osquery.logging.resultPlugin "lambda" }}
+          - name: FLEET_LAMBDA_RESULT_FUNCTION
+            value: "{{ .Values.osquery.logging.lambda.resultFunction }}"
+          {{- end }}
+          {{- if ne .Values.osquery.logging.lambda.accessKeyID "" }}
+          - name: FLEET_LAMBDA_ACCESS_KEY_ID
+            value: "{{ .Values.osquery.logging.lambda.accessKeyID }}"
+          - name: FLEET_LAMBDA_SECRET_ACCESS_KEY
+            valueFrom:
+              secretKeyRef:
+                name: "{{ .Values.osquery.secretName }}"
+                key: "{{ .Values.osquery.logging.lambda.secretKey }}"
+          {{ else }}
+          - name: FLEET_LAMBDA_STS_ASSUME_ROLE_ARN
+            value: "{{ .Values.osquery.logging.lambda.stsAssumeRoleARN }}"
+          {{- end }}
+          {{- end }}
+
+
+          {{- if or (eq .Values.osquery.logging.statusPlugin "pubsub") (eq .Values.osquery.logging.resultPlugin "pubsub") }}
+          - name: FLEET_PUBSUB_PROJECT
+            value: "{{ .Values.osquery.logging.pubsub.project }}"
+          {{- end }}
+          {{- if eq .Values.osquery.logging.statusPlugin "pubsub" }}
+          - name: FLEET_PUBSUB_STATUS_TOPIC
+            value: "{{ .Values.osquery.logging.pubsub.statusTopic }}"
+          {{- end }}
+          {{- if eq .Values.osquery.logging.resultPlugin "pubsub" }}
+          - name: FLEET_PUBSUB_RESULT_TOPIC
+            value: "{{ .Values.osquery.logging.pubsub.resultTopic }}"
+          {{- end }}
+          ## END OSQUERY SECTION
+          ## APPEND ENVIRONMENT VARIABLES FROM VALUES
+          {{- range $key, $value := .Values.environments }}
+          - name: {{ $key }}
+            value: {{ $value | quote }}
+          {{- end }}
+          ## APEND ENVIRONMENT VARIABLES FROM SECRETS/CMs
+          {{- range .Values.envsFrom }}
+          - name: {{ .name }}
+            valueFrom:
+          {{- if .valueFrom.configMapKeyRef }}
+              configMapKeyRef:
+                name: {{ .valueFrom.configMapKeyRef.name }}
+                key: {{ .valueFrom.configMapKeyRef.key }}
+          {{- else if .valueFrom.secretKeyRef }}
+              secretKeyRef:
+                name: {{ .valueFrom.secretKeyRef.name }}
+                key: {{ .valueFrom.secretKeyRef.key }}
+          {{- end }}
+          {{- end }}
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop: [ALL]
+          privileged: false
+          readOnlyRootFilesystem: true
+          runAsGroup: 3333
+          runAsUser: 3333
+          runAsNonRoot: true
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: {{ .Values.fleet.listenPort }}
+            {{- if .Values.fleet.tls.enabled }}
+            scheme: HTTPS
+            {{- end }}
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: {{ .Values.fleet.listenPort }}
+            {{- if .Values.fleet.tls.enabled }}
+            scheme: HTTPS
+            {{- end }}
+        {{- if or (.Values.fleet.tls.enabled) (.Values.database.tls.enabled) (eq .Values.osquery.logging.statusPlugin "filesystem") (eq .Values.osquery.logging.resultPlugin "filesystem") }}
+        volumeMounts:
+          - name: tmp
+            mountPath: /tmp
+          {{- if .Values.fleet.tls.enabled }}
+          - name: fleet-tls
+            readOnly: true
+            mountPath: /secrets/tls
+          {{- end }}
+          {{- if .Values.database.tls.enabled }}
+          - name: mysql-tls
+            readOnly: true
+            mountPath: /secrets/mysql
+          {{- end }}
+          {{- if or (eq .Values.osquery.logging.statusPlugin "filesystem") (eq .Values.osquery.logging.resultPlugin "filesystem") }}
+          - name: osquery-logs
+            mountPath: /logs
+          {{- end }}
+          {{- with .Values.fleet.extraVolumeMounts }}
+          {{- toYaml . | nindent 10 }}
+          {{- end }}
+        {{- end }}
+      {{- if .Values.gke.cloudSQL.enableProxy }}
+      - name: cloudsql-proxy
+        image: "gcr.io/cloudsql-docker/gce-proxy:{{ .Values.gke.cloudSQL.imageTag }}"
+        command:
+        - "/cloud_sql_proxy"
+        - "-verbose={{ .Values.gke.cloudSQL.verbose}}"
+        - "-instances={{ .Values.gke.cloudSQL.instanceName }}=tcp:3306"
+        resources:
+          limits:
+            cpu: 0.5 # 500Mhz
+            memory: 150Mi
+          requests:
+            cpu: 0.1 # 100Mhz
+            memory: 50Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop: [ALL]
+          privileged: false
+          readOnlyRootFilesystem: true
+          runAsGroup: 3333
+          runAsUser: 3333
+          runAsNonRoot: true
+      {{- end }}
+      hostPID: false
+      hostNetwork: false
+      hostIPC: false
+      serviceAccountName: fleet
+      {{- if or (.Values.fleet.tls.enabled) (.Values.database.tls.enabled) (eq .Values.osquery.logging.statusPlugin "filesystem") (eq .Values.osquery.logging.resultPlugin "filesystem") }}
+      volumes:
+        - name: tmp
+          emptyDir:
+        {{- if .Values.fleet.tls.enabled }}
+        - name: fleet-tls
+          secret:
+            {{- if .Values.fleet.tls.uniqueTLSSecret }}
+            secretName: "{{ .Values.fleet.tls.secretName }}"
+            {{- else }}
+            secretName: "{{ .Values.fleet.secretName }}"
+            {{- end }}
+        {{- end }}
+        {{- if .Values.database.tls.enabled }}
+        - name: mysql-tls
+          secret:
+            secretName: "{{ .Values.database.secretName }}"
+        {{- end }}
+        {{- if or (eq .Values.osquery.logging.statusPlugin "filesystem") (eq .Values.osquery.logging.resultPlugin "filesystem") }}
+        - name: osquery-logs
+          emptyDir:
+            sizeLimit: "{{ .Values.osquery.logging.filesystem.volumeSize }}"
+        {{- end }}
+        {{- with .Values.fleet.extraVolumes }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}

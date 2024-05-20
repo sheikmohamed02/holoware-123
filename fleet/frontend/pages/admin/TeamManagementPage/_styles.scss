@@ -1,0 +1,39 @@
+.team-management {
+  &__page-description {
+    font-size: $x-small;
+    color: $core-fleet-black;
+    @include sticky-settings-description;
+    padding-bottom: $pad-medium;
+  }
+  .data-table-block {
+    .data-table__table {
+      thead {
+        .name__header {
+          width: $col-md;
+        }
+
+        .host_count__header {
+          width: $col-md;
+        }
+
+        .actions__header {
+          width: auto;
+        }
+      }
+
+      tbody {
+        .name__cell {
+          max-width: $col-md;
+        }
+
+        .host_count__cell {
+          max-width: $col-md;
+        }
+
+        .actions__cell {
+          width: auto;
+        }
+      }
+    }
+  }
+}

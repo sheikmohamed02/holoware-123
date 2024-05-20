@@ -1,0 +1,171 @@
+.fleet-checkbox {
+  @include clearfix;
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  &__input {
+    opacity: 0;
+    width: 16px;
+    height: 16px;
+    margin: 2px;
+
+    &:focus + .fleet-checkbox__tick {
+      &::after {
+        border-color: $core-vibrant-blue;
+      }
+    }
+
+    &:checked + .fleet-checkbox__tick {
+      &::after {
+        background-color: $core-vibrant-blue;
+        border: solid 2px $core-vibrant-blue;
+      }
+
+      &:hover {
+        &::after {
+          background-color: $core-vibrant-blue-over;
+          border: solid 2px $core-vibrant-blue-over;
+        }
+      }
+
+      &--disabled {
+        &::after {
+          @include disabled-checkbox;
+        }
+
+        &:hover {
+          &::after {
+            @include disabled-checkbox;
+          }
+        }
+      }
+
+      &::before {
+        @include position(absolute, 50% null null 50%);
+        transform: rotate(45deg);
+        box-sizing: border-box;
+        display: block;
+        width: 7px;
+        height: 13px;
+        margin: -8px 0 0 -3px;
+        border: 2px solid $core-white;
+        border-top: 0;
+        border-left: 0;
+        content: "";
+        z-index: 9;
+      }
+    }
+  }
+
+  &__tick {
+    @include size(20px);
+    position: absolute;
+    display: inline-block;
+    cursor: pointer;
+
+    &::after {
+      @include size(20px);
+      transition: border 75ms ease-in-out, background 75ms ease-in-out;
+      border-radius: $border-radius;
+      border: solid 2px $ui-fleet-black-25;
+      content: "";
+      box-sizing: border-box;
+      display: block;
+      background-color: $core-white;
+      visibility: visible;
+    }
+    &:hover {
+      &::after {
+        border: solid 2px $core-vibrant-blue-over;
+      }
+    }
+
+    &--disabled {
+      &::after {
+        background-color: $ui-fleet-black-25;
+      }
+      cursor: default;
+    }
+
+    &--small {
+      @include size(16px);
+
+      &::after {
+        @include size(16px);
+      }
+    }
+
+    &--indeterminate {
+      &::after {
+        background-color: $core-vibrant-blue;
+        border: solid 1px $core-vibrant-blue;
+      }
+
+      &:hover {
+        &::after {
+          &::after {
+            background-color: $core-vibrant-blue-over;
+            border: solid 1px $core-vibrant-blue-over;
+          }
+        }
+      }
+
+      &::before {
+        @include position(absolute, 50% null null 50%);
+        box-sizing: border-box;
+        display: block;
+        width: 10px;
+        margin: -1px 0 0 -5px;
+        border: 2px solid $core-white;
+        border-top: 0;
+        border-left: 0;
+        content: "";
+      }
+    }
+  }
+
+  &__label {
+    font-size: $x-small;
+    padding-left: $pad-small;
+    display: inline-block;
+    vertical-align: top;
+
+    &--disabled {
+      color: $ui-fleet-black-50;
+    }
+  }
+
+  &__label-tooltip {
+    font-size: $x-small;
+    padding-left: $pad-small;
+    display: inherit;
+    vertical-align: top;
+  }
+
+  &__help-text {
+    @include help-text;
+  }
+}
+
+.inverse {
+  flex-direction: row-reverse; // Switches the text to the left side of checkbox as all checkboxes are now display flex
+
+  .fleet-checkbox {
+    &__input {
+      float: right;
+    }
+
+    &__tick {
+      left: initial;
+      right: -8px;
+    }
+
+    &__label {
+      float: left;
+      padding-left: 0;
+      font-weight: $bold;
+      font-size: $x-small;
+    }
+  }
+}

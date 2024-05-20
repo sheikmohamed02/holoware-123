@@ -1,0 +1,50 @@
+{
+  "name": "@fleetdm/website",
+  "private": true,
+  "version": "0.0.21",
+  "description": "a Sails application",
+  "keywords": [],
+  "dependencies": {
+    "@sailshq/connect-redis": "^6.1.3",
+    "@sailshq/lodash": "^3.10.5",
+    "@sailshq/socket.io-redis": "^6.1.2",
+    "jsforce": "1.11.1",
+    "jsonwebtoken": "9.0.2",
+    "moment": "2.29.4",
+    "sails": "^1.5.11",
+    "sails-hook-apianalytics": "^2.0.6",
+    "sails-hook-organics": "^2.2.2",
+    "sails-hook-orm": "^4.0.3",
+    "sails-hook-sockets": "^3.0.0",
+    "sails-postgresql": "^5.0.1"
+  },
+  "devDependencies": {
+    "eslint": "5.16.0",
+    "grunt": "1.0.4",
+    "htmlhint": "0.11.0",
+    "lesshint": "6.3.6",
+    "marked": "4.0.10",
+    "sails-hook-grunt": "^5.0.0",
+    "yaml": "1.10.2"
+  },
+  "scripts": {
+    "custom-tests": "echo \"(No other custom tests yet.)\" && echo",
+    "build-for-prod": "echo 'Now compiling markdown content and building+minifying assets for production...' && echo '(Hang tight, this could take a while.)' && echo && ./node_modules/sails/bin/sails.js run build-static-content ${BUILD_SCRIPT_ARGS} && echo && node node_modules/grunt/bin/grunt buildProd || (echo && echo '------------------------------------------' && echo 'IMPORTANT!  IMPORTANT!  IMPORTANT!' && echo 'ERROR: Could not compile assets for production!' && echo && echo 'Please fix the issues logged above' && echo 'and push that up.  Then, try deploying again.' && echo '------------------------------------------' && echo) && mv www .www && node -e 'sailsrc = JSON.parse(require(\"fs\").readFileSync(\"./.sailsrc\", \"utf8\"));  if (sailsrc.paths&&sailsrc.paths.public !== undefined || sailsrc.hooks&&sailsrc.hooks.grunt !== undefined) { throw new Error(\"Cannot complete deployment script: .sailsrc file has conflicting contents!  Please remove the conflicting stuff from .sailsrc, then commit and push that up.\"); }  sailsrc.paths = sailsrc.paths || {};  sailsrc.paths.public = \"./.www\";   sailsrc.hooks = sailsrc.hooks || {};  sailsrc.hooks.grunt = false;  require(\"fs\").writeFileSync(\"./.sailsrc\", JSON.stringify(sailsrc))' && echo 'Build is complete.  Ready to deploy.'",
+    "build": "echo '\"npm run build\" deliberately left unimplemented to prevent its use, since different platforms like Heroku and GitHub Actions all like to try and run it by default, which can lead to inadvertent duplication and unnecessary lock-in, since one has to find the config to turn that off.'",
+    "lint": "./node_modules/eslint/bin/eslint.js . --max-warnings=0 --report-unused-disable-directives && echo '✔  Your .js files look so good.' && ./node_modules/htmlhint/bin/htmlhint -c ./.htmlhintrc views/*.ejs && ./node_modules/htmlhint/bin/htmlhint -c ./.htmlhintrc views/**/*.ejs && ./node_modules/htmlhint/bin/htmlhint -c ./.htmlhintrc views/**/**/*.ejs && ./node_modules/htmlhint/bin/htmlhint -c ./.htmlhintrc views/pages/**/**/*.ejs && ./node_modules/htmlhint/bin/htmlhint -c ./.htmlhintrc views/pages/**/**/**/*.ejs && ./node_modules/htmlhint/bin/htmlhint -c ./.htmlhintrc views/pages/**/**/**/**/*.ejs && ./node_modules/htmlhint/bin/htmlhint -c ./.htmlhintrc views/pages/**/**/**/**/**/*.ejs && echo '✔  So do your .ejs files.' && ./node_modules/lesshint/bin/lesshint assets/styles/ --max-warnings=0 && echo '✔  Your .less files look good, too.'",
+    "start": "NODE_ENV=production node app.js",
+    "start-dev": "./node_modules/sails/bin/sails.js run build-static-content && ./node_modules/sails/bin/sails.js console",
+    "test": "npm run lint && npm run custom-tests && echo 'Done.'",
+    "wipe": "sails_datastores__default__adapter=sails-postgresql sails_datastores__default__ssl='{ \"rejectUnauthorized\": false }' sails lift --drop"
+  },
+  "main": "app.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/fleetdm/fleetdm-com.git"
+  },
+  "author": "mikermcneil",
+  "license": "SEE LICENSE IN ../LICENSE",
+  "engines": {
+    "node": "^12.6"
+  }
+}

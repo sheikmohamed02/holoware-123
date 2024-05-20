@@ -1,0 +1,25 @@
+name: file_lines
+notes: This table is not a core osquery table. It is included as part of Fleet's agent ([fleetd](https://fleetdm.com/docs/get-started/anatomy#fleetd)).
+description: Allows reading an arbitrary file.
+platforms: 
+  - darwin
+  - windows
+  - linux
+evented: false
+examples: >-
+  Output the content of `/etc/hosts` line by line. 
+  
+  ```
+  
+  SELECT * FROM file_lines WHERE path='/etc/hosts';
+  
+  ```
+columns:
+  - name: path
+    description: Path of the file to read.
+    required: true
+    type: text
+  - name: line
+    description: Output of the file, line by line.
+    required: false
+    type: text

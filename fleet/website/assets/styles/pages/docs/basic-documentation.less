@@ -1,0 +1,1060 @@
+#basic-documentation {
+
+  h1 {
+    font-size: 28px;
+    line-height: 34px;
+  }
+
+  h2 {
+    font-size: 24px;
+    line-height: 28px;
+  }
+
+  h3 {
+    font-size: 20px;
+    line-height: 24px;
+  }
+
+  h4 {
+    margin-top: 24px;
+    font-size: 18px;
+    line-height: 24px;
+  }
+
+
+  a:not(.btn) {
+    color: @core-vibrant-blue;
+  }
+
+  ul {
+    list-style: none;
+    padding-left: 8px;
+
+    li {
+      margin-bottom: 8px;
+    }
+
+  }
+
+  .markdown-heading:hover {
+    .markdown-link {
+      height: 16px;
+      vertical-align: middle;
+      margin-left: 8px;
+      content: url('/images/icon-link-16x16@2x.png');
+    }
+  }
+
+  .markdown-heading.copied::before {
+    content: 'Link copied to clipboard';
+    display: flex;
+    font-weight: 400;
+    position: relative;
+    top: -25px;
+    height: 0px;
+    font-size: 14px;
+    // line-height: 14px;
+    color: @core-vibrant-blue;
+    animation-name: copiedText;
+    animation-duration: 4s;
+    animation-fill-mode: forwards;
+  }
+
+  @keyframes copiedText {
+    0% {opacity: 0;}
+    20% {opacity: 100;}
+    30% {opacity: 80;}
+    50% {opacity: 60;}
+    70% {opacity: 40;}
+    80% {opacity: 20;}
+    100% {opacity: 0;}
+  }
+
+  [purpose='search'] {
+    // Note: We're using classes here to override the default Docsearch styles;
+    button {
+      width: 100%;
+      cursor: text;
+      margin: 0;
+    }
+    .DocSearch-Button {
+      border-top-left-radius: 6px;
+      border-bottom-left-radius: 6px;
+      border-top-right-radius: 6px;
+      border-bottom-right-radius: 6px;
+      border: 1px solid @core-fleet-black-25;
+      background-color: #FFF;
+      padding: 6px;
+      height: 48px;
+    }
+    .DocSearch-Button:hover {
+      box-shadow: none;
+      border: 1px solid @core-fleet-black-25;
+      color: @core-fleet-black-50;
+    }
+    .DocSearch-Search-Icon {
+      margin-left: 10px;
+      height: 16px;
+      width: 16px;
+      color: @core-fleet-black-50;
+      stroke-width: 3px;
+    }
+    .DocSearch-Button-Keys {
+      display: none;
+    }
+    .input-group:focus-within {
+      border: 1px solid @core-vibrant-blue;
+    }
+    .DocSearch-Button-Placeholder {
+      font-size: 16px;
+      font-weight: 400;
+      padding-left: 12px;
+    }
+    .DocSearch-Button-Placeholder::after {
+      content: ' the docs...';
+    }
+    input {
+      padding-top: 6px;
+      padding-bottom: 6px;
+      border: none;
+    } &::placeholder {
+      font-size: 16px;
+      line-height: 24px;
+    }
+    .input-group {
+      border-top-left-radius: 6px;
+      border-bottom-left-radius: 6px;
+      border-top-right-radius: 6px;
+      border-bottom-right-radius: 6px;
+      border: 1px solid @core-fleet-black-25;
+      background-color: #FFF;
+    }
+    .input-group:focus-within {
+      border: 1px solid @core-vibrant-blue;
+    }
+    .docsearch-input {
+      height: 100%;
+      width: 98%;
+    }
+    .docsearch-input:focus-visible {
+      outline: none;
+    }
+    .ds-input:focus {
+      outline: rgba(0, 0, 0, 0);
+    }
+    .input-group-text {
+      color: @core-fleet-black-50;
+    }
+    .form-control {
+      height: 48px;
+      padding: 0px;
+      font-size: 16px;
+    } &:focus {
+      border: none;
+    }
+  }
+
+  [purpose='docs-landing-page'] {
+    h3 {
+      font-size: 24px;
+      line-height: 32px;
+    }
+    a {
+      color: @core-vibrant-blue;
+    }
+    [purpose='support-link'] {
+      text-align: center;
+      margin-top: 24px;
+      margin-bottom: 0px;
+      a {
+        display: inline-block;
+      }
+      a:after {
+        background-image: url('/images/icon-arrow-upper-right-7x7@2x.png');
+        background-size: 7px 7px;
+        display: inline-block;
+        position: relative;
+        top: -4px;
+        left: 4px;
+        width: 7px;
+        height: 7px;
+        content: '';
+      }
+      br {
+        display: none;
+      }
+    }
+    [purpose='docs-tree'] {
+      a {
+        color: @core-fleet-black;
+        text-decoration: none;
+        &:hover {
+          color: @core-vibrant-blue;
+        }
+      }
+    }
+  }
+
+
+  [purpose='docs-template'] {
+
+    h3 {
+      code {
+        color: @core-fleet-black;
+      }
+    }
+
+    [purpose='edit-button-container'] {
+      position: relative;
+    }
+
+    [purpose='edit-button'], [purpose='faq-edit-button'] {
+      color: @core-vibrant-blue;
+
+      font-size: 12px;
+      position: absolute;
+      right: 230px;
+      top: 27px;
+      cursor: pointer;
+      border: 1px solid @core-vibrant-blue;
+      border-radius: 4px;
+      padding: 4px 8px;
+      text-decoration: none;
+      i {
+        height: 16px;
+        padding-right: 5px;
+      } &:hover {
+        background: @core-vibrant-blue;
+        color: @accent-white;
+        text-decoration: none;
+      }
+    }
+    [purpose='faq-edit-button'] {
+      right: 48px;
+    }
+
+
+    [purpose='search'] {
+
+      .form-control {
+        height: 36px;
+        font-size: 16px;
+        padding: 0;
+      }
+      .DocSearch-Button {
+        height: 36px;
+        font-size: 16px;
+        padding: 0;
+      }
+    }
+
+    [purpose='breadcrumbs'] {
+      p, a {
+        font-size: 14px;
+      }
+    }
+
+
+    [purpose='mobile-docs-nav'] {
+
+      a {
+        color: @core-fleet-black;
+        text-decoration: none;
+
+        &.active {
+          color: @core-vibrant-blue;
+        }
+        &:hover {
+          color: @core-vibrant-blue;
+        }
+
+      }
+
+      [purpose='mobile-docs-nav-other-links'] {
+        border-top: 1px solid #C5C7D1;
+
+      }
+      [purpose='docs-nav-button'] {
+        color: @core-fleet-black;
+        background-color: transparent;
+        font-weight: 400;
+        font-size: 16px;
+        padding: 0;
+        padding-top: 12px;
+        padding-bottom: 12px;
+        cursor: pointer;
+
+        &:focus {
+            box-shadow: none;
+        }
+
+      }
+
+    }
+
+    [purpose='left-sidebar'] {
+      scrollbar-width: none;
+      font-size: 14px;
+
+      a {
+        color: @core-fleet-black;
+        text-decoration: none;
+
+        &:hover {
+          color: #6A67FE;
+        }
+
+        &.btn-primary {
+          color: #fff;
+        }
+
+        .btn-primary {
+          color: #fff;
+          background-color: #ff5c83;
+          border-color: #ff5c83;
+
+          &:hover {
+            background-color: darken(#ff5c83, 10%);
+            border-color: darken(#ff5c83, 10%);
+          }
+
+        }
+
+      }
+
+      .left-nav {
+        border-bottom: 1px solid @core-fleet-black-25;
+      }
+
+      .topic {
+        padding-left: 0px;
+        color: @core-fleet-black-75;
+        &.active {
+          color: @core-vibrant-blue;
+        }
+
+      }
+
+
+    }
+    [purpose='left-sidebar']::-webkit-scrollbar, [purpose='right-sidebar']::-webkit-scrollbar, [purpose='subtopics']::-webkit-scrollbar {
+      display: none;
+    }
+    [purpose='expanded-nav'] {
+      li {
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 21px;
+        color: @core-fleet-black-75;
+      }
+
+      [purpose='nav-section']:not(:last-of-type) {
+        border-bottom: 1px solid #E2E4EA;
+        margin-bottom: 16px;
+      }
+      [purpose='nav-section'] {
+        padding-bottom: 12px;
+        [purpose='nav-section-title'] {
+          font-size: 13px;
+          font-weight: 500;
+          line-height: 18px;
+          text-transform: uppercase;
+          margin-bottom: 12px;
+          padding-top: 8px;
+          color: @core-fleet-black;
+        }
+      }
+    }
+
+    [purpose='right-sidebar'] {
+      scrollbar-width: none;
+      p, a {
+        font-size: 14px;
+      }
+
+      a {
+        &:hover {
+          color: #6A67FE;
+        }
+      }
+
+      li {
+        margin-bottom: 0;
+      }
+
+    }
+    [purpose='swag-cta'] {
+      display: flex;
+      border: 1px solid #E3E3E3;
+      box-shadow: 1px 2px 2px rgba(197, 199, 209, 0.2);
+      border-radius: 6px;
+      padding: 20px;
+      margin-top: 8px;
+      color: @core-fleet-black;
+      width: 100%;
+      a {
+        text-decoration: none;
+        color: @core-fleet-black;
+        &:hover {
+          color: @core-fleet-black;
+        }
+      }
+      p {
+        white-space: nowrap;
+        font-weight: 700;
+        font-size: 14px;
+        line-height: 24px;
+      }
+      span {
+        text-align: center;
+        font-size: 14px;
+        line-height: 19px;
+        color: @core-fleet-black;
+      }
+    }
+    [purpose='right-sidebar-buttons'] {
+      margin-top: 30px;
+      [purpose='premium-cta'] {
+        margin-top: 16px;
+        text-align: center;
+        padding: 16px;
+        color: #FFF;
+        border-radius: 6px;
+        p {
+          font-size: 15px;
+          line-height: 17px;
+          span {
+            font-weight: 800;
+          }
+        }
+        [purpose='docs-cta-image'] {
+          margin-bottom: 16px;
+          img {
+            width: 124px;
+            height: 124px;
+          }
+        }
+
+        [purpose='premium-cta-btn'] {
+          text-align: center;
+          font-weight: 700;
+          padding: 4px 16px;
+          display: flex;
+          justify-content: center;
+          width: 100%;
+          position: relative;
+          background: #192147;
+          box-shadow: 1px 1px 2px rgba(25, 33, 71, 0.24);
+          border-radius: 4px;
+          color: #fff;
+          overflow: hidden;
+        }
+        [purpose='premium-cta-btn']::before {
+          background: linear-gradient(180deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0) 100%);
+          opacity: 1;
+          content: ' ';
+          position: absolute;
+          top: 0;
+          left: -5px;
+          width: 55%;
+          height: 100%;
+          transform: skew(-10deg);
+          transition: left 0.5s ease-in, opacity 0.50s ease-in, width 0.5s ease-in;
+        }
+        [purpose='premium-cta-btn']:hover:before {
+          opacity: 0;
+          left: 160px;
+          width: 110%;
+        }
+      }
+      [purpose='demo-cta'] {
+        display: flex;
+        border: 1px solid #E3E3E3;
+        box-shadow: 1px 2px 2px rgba(197, 199, 209, 0.2);
+        border-radius: 6px;
+        padding: 20px 16px;
+        color: @core-fleet-black;
+        width: 100%;
+        cursor: pointer;
+        a {
+
+          text-decoration: none;
+          color: @core-fleet-black;
+          &:hover {
+            color: @core-fleet-black;
+          }
+        }
+        p {
+          font-weight: 700;
+          font-size: 14px;
+          line-height: 18px;
+        }
+        span {
+          text-align: center;
+          font-size: 14px;
+          line-height: 19px;
+          color: @core-fleet-black;
+        }
+      }
+    }
+
+    [purpose='content'] {
+      hr {
+        margin: 0px;
+        padding: 0px;
+        display: none;
+      }
+      h1:first-of-type {
+        // Note: We're adding right margin to the first h1 to make sure it won't overlap the edit page button.
+        margin-right: 100px;
+      }
+      h1 {
+        padding-bottom: 16px;
+        scroll-margin-top: 104px;
+      }
+
+      h2 {
+        border-top: 1px solid @core-fleet-black-25;
+        margin-top: 32px;
+        padding-top: 52px;
+        padding-bottom: 24px;
+        scroll-margin-top: 80px;
+        &:first-of-type {
+          border-top: none;
+          padding-top: 24px;
+          scroll-margin-top: 108px;
+          margin-top: 0px;
+        }
+      }
+
+      h3 {
+        padding-bottom: 16px;
+        margin-top: 24px;
+        margin-bottom: 40px;
+        border-bottom: 1px dashed @core-fleet-black-25;
+        scroll-margin-top: 104px;
+      }
+
+      h4 {
+        padding-bottom: 24px;
+        margin-bottom: 0px;
+        scroll-margin-top: 104px;
+      }
+
+      h5 {
+        font-size: 16px;
+        font-weight: 700;
+        font-family: @main-font;
+        margin-bottom: 16px;
+        scroll-margin-top: 104px;
+      }
+      pre + hr + h3 {
+        padding-top: 0px;
+      }
+      pre +  h3 {
+        padding-top: 0px;
+      }
+      blockquote {
+        margin: 24px 0 32px 32px;
+        display: block;
+        position: relative;
+      }
+      [purpose='deploying-guide-buttons'] {
+        margin-top: 40px;
+        // padding-bottom: 40px;
+        div {
+          display: flex;
+          flex-direction: column;
+          align-content: center;
+          justify-content: center;
+          text-align: center;
+          flex-grow: 1;
+          p {
+            font-size: 14px;
+            font-style: normal;
+            font-weight: 400;
+            margin-bottom: 16px;
+          }
+          img {
+            padding: 0;
+            width: auto;
+            height: 80px;
+          }
+        }
+        a {
+          margin-bottom: 40px;
+          padding: 24px;
+          border: 1px solid @core-fleet-black-25;
+          margin-left: 8px;
+          margin-right: 8px;
+          border-radius: 12px;
+          flex-grow: 1;
+          color: unset;
+          &:hover {
+            text-decoration: unset;
+            border: 1px solid @core-vibrant-blue;
+          }
+        }
+      }
+      [purpose='deploy-to-render-button'] {
+        img {
+          margin: 0;
+        }
+      }
+      [purpose='quote'] {
+        font-style: italic;
+        line-height: 36px;
+        font-size: 24px;
+      }
+      [purpose='large-quote'] {
+        font-style: italic;
+        line-height: 24px;
+        font-size: 16px;
+      }
+      [purpose='large-quote']::before, [purpose='quote']::before {
+        content: ' ';
+        background-image: url('/images/icon-quote-mark-22x18@2x.png');
+        background-size: 22px 18px;
+        display: block;
+        position: relative;
+        top: 16px;
+        left: -32px;
+        width: 22px;
+        height: 18px;
+      }
+      [purpose='tip'] {
+        margin: 16px 0 32px;
+        background: #F4F4FF;
+        padding: 24px;
+        border-radius: 8px;
+        display: flex;
+        img {
+          display: flex;
+          margin: 4px 12px 0 0;
+          height: 16px;
+          width: 16px;
+          padding: 0px;
+        }
+        p {
+          display: block;
+          margin-bottom: 16px;
+          line-height: 24px;
+          font-size: 16px;
+        }
+        p:last-child {
+          margin-bottom: 0px;
+        }
+        ul {
+          padding-left: 16px;
+        }
+        ul:last-child {
+          margin-bottom: 0px;
+        }
+        li:last-child {
+          padding-bottom: 0px;
+        }
+      }
+
+      ul {
+        list-style-type: disc;
+        padding-left: 32px;
+        padding-inline-start: 16px;
+        padding: 0 0 0 32px;
+        margin-top: 16px;
+        margin-bottom: 20px;
+        pre {
+          margin: 0px 0px 16px;
+        }
+      }
+
+      ol {
+        counter-reset: custom-counter;
+        list-style-type: none;
+        padding-inline-start: 0px;
+        padding: 0;
+        margin-top: 16px;
+        margin-bottom: 20px;
+        ul > li {
+          text-indent: 0px;
+          margin-left: 0px;
+        }
+        > li {
+          counter-increment: custom-counter;
+          margin-left: 36px;
+          text-indent: -36px;
+          padding-left: 0px;
+          padding-bottom: 24px;
+          code:not(.nohighlight):not(.mermaid) {
+            display: inline;
+          }
+          > pre:not(.algolia-autocomplete):not(.ds-dropdown-menu):not(.json) {
+            margin-top: 32px;
+            margin-bottom: 16px;
+            text-indent: 0px;
+          }
+          p {
+            padding-bottom: 16px;
+            display: inline;
+            margin-bottom: 0px;
+          }
+          blockquote {
+            text-indent: 0px;
+            p {
+              padding-bottom: 0px;
+            }
+          }
+        }
+        > li::before {
+          content: counter(custom-counter);
+          background-color: #E2E4EA;
+          width: 24px;
+          font-size: 13px;
+          display: inline-block;
+          border-radius: 50%;
+          margin-right: 10px;
+          padding: 2px 4px;
+          text-align: center;
+          line-height: 20px;
+          text-indent: 0px;
+        }
+      }
+
+      li {
+        margin-bottom: 16px;
+        padding-left: 8px;
+      }
+
+      img {
+        display: flex;
+        max-width: 100%;
+        height: auto;
+        margin: auto;
+        padding-top: 24px;
+        padding-bottom: 24px;
+      }
+
+      h1 + ul {
+        display: none; // Hides links at top of some markdown files
+      }
+
+      h2 + h3 {
+        // padding-top: 8px;
+      }
+
+      table {
+        border: 1px solid @border-lt-gray;
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 16px;
+        line-height: 24px;
+        margin-bottom: 16px;
+        word-wrap: break-word;
+
+        th {
+          font-weight: @bold;
+          font-family: @header-font;
+          border: 1px solid @border-lt-gray;
+          padding: 8px 7px 7px 8px;
+        }
+
+        td {
+
+          font-family: @main-font;
+          border: 1px solid @border-lt-gray;
+          padding: 8px 7px 7px 8px;
+        }
+      }
+      .note {
+        background-color: @core-vibrant-blue-10;
+        border-radius: 12px;
+        text-decoration: none;
+      }
+
+      [purpose='next-steps-button'] {
+        font-size: 16px;
+        line-height: 25px;
+        padding: 20px;
+        img {
+          display: inline;
+          height: 24px;
+          width: auto;
+          padding-top: 0px;
+          padding-bottom: 0px;
+          margin: 0px;
+        }
+      }
+
+      [purpose='docs-start-cta'] {
+        margin-top: 40px;
+        border: 1px solid @core-fleet-black-10;
+        border-radius: 16px;
+        overflow: hidden;
+        [purpose='docs-start-cta-image'] {
+          height: 180px;
+          background-image: url('/images/docs-cta-stage-1-314x180@2x.png');
+          background-size: cover;
+          background-position-y: center;
+        }
+        [purpose='docs-start-cta-content'] {
+          flex-direction: column;
+          align-items: center;
+          padding: 20px 24px;
+          flex-grow: 1;
+          h2 {
+            padding: 0;
+            margin-bottom: 4px;
+          }
+          p {
+            margin-bottom: 12px;
+          }
+        }
+        [purpose='continue-button'] {
+          font-size: 14px;
+          padding: 6px 12px;
+          width: 131px;
+        }
+      }
+
+      [purpose='checklist-item'] {
+        display: flex;
+        input[type='checkbox'] {
+          margin-left: -18px;
+          min-width: 16px;
+          min-height: 16px;
+          align-self: center;
+        }
+        input:checked, input:active {
+          accent-color: @core-vibrant-blue;
+        }
+        [purpose='task'] {
+          margin-left: 8px;
+          input {
+            display: none;
+          }
+          p {
+            margin-bottom: 0px;
+          }
+        }
+      }
+      [purpose='checklist-item']::marker {
+        display: none;
+      }
+      [purpose='embedded-content'] {
+        position: relative;
+        margin-bottom: 40px;
+        width: 100%;
+        padding-bottom: 56%;
+        iframe {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          border: none;
+          border-radius: 12px;
+        }
+      }
+
+    }
+  }
+
+  // for larger screens
+  @media (min-width: 992px) {
+
+    [purpose='docs-template'] {
+      ul {
+        .topic {
+          padding-left: 8px;
+        }
+      }
+
+      [purpose='search'] {
+        .input-group {
+          min-width: 400px;
+        }
+      }
+
+      [purpose='page-title'] {
+        h1 {
+          display: block;
+        }
+      }
+
+      .header-hidden { // For scrolling the sidebars with the sticky header
+        transform: translateY(-80px);
+        max-height: calc(~'100vh - 60px');
+      }
+      .scrolled:not(.header-hidden) { // For when the page has been scrolled and the header is visible
+        max-height: calc(~'100vh - 140px');
+      }
+      [purpose='left-sidebar'] {
+        height: fit-content;
+        min-width: 216px;
+        transition-property: all;
+        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+        transition-duration: 500ms;
+      }
+
+      [purpose='right-sidebar'] {
+        p {
+          line-height: 21px;
+        }
+        min-width: 190px;
+        position: sticky;
+        top: 170px;
+        height: fit-content;
+        overflow-y: auto;
+        transition-property: all;
+        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+        transition-duration: 500ms;
+
+        [purpose='subtopics'] {
+          scrollbar-width: none;
+          overflow-y: auto;
+          color: @core-fleet-black;
+          padding-top: 4px;
+          padding-bottom: 4px;
+          border-left: 1px solid @core-vibrant-blue-25;
+          a {
+            color: @core-fleet-black;
+            text-decoration: none;
+            &:hover {
+              color: @core-vibrant-blue;
+            }
+          }
+        }
+        &:not(.scrolled) {
+          [purpose='subtopics'] {
+            max-height: calc(~'100vh - 225px'); // Using a calculated max-height to allow the sidebars to be fully scrollable before the content is scrolled.
+          }
+        }
+      }
+
+      [purpose='content'] {
+        min-width: 0px; // in order for <pre> elements to shrink properly, the parent flex element needs to override min-width auto
+      }
+    }
+    [purpose='back-to-top-button-container'] {
+      position: sticky;
+      bottom: 107px;
+      overflow-x: hidden;
+      pointer-events: none;
+    }
+    [purpose='back-to-top-button'] {
+      display: inline-block;
+      position: relative;
+      left: calc(~'100% - 103px');
+      width: 104px;
+      background: #FFFFFF;
+      padding: 8px 12px;
+      transition: transform 0.5s;
+      transform: translateX(104px);
+      cursor: pointer;
+      border: 1px solid #E2E4EA;
+      border-radius: 16px 0px 0px 16px;
+      pointer-events: auto;
+      p {
+        color: #515774;
+        font-size: 11px;
+        font-weight: 700;
+        line-height: 16px;
+      }
+      img {
+        height: 12px;
+        margin-right: 6px;
+      }
+    }
+    [purpose='back-to-top-button'].show {
+      display: inline-block;
+      transition: transform 0.5s;
+      transform: translateX(0);
+    }
+    [purpose='back-to-top-button'].show:hover {
+      background: #F9FAFC;
+    }
+  }
+
+  // for smaller screens
+  @media (max-width: 991px) {
+    [purpose='back-to-top-button-container'] {
+      display: none;
+    }
+    [purpose='docs-template'] {
+      padding: 0px 40px;
+
+      [purpose='back-to-top-button'].show {
+        display: none;
+      }
+
+      [purpose='edit-button'], [purpose='faq-edit-button'] {
+        top: -55px;
+        right: 0px;
+      }
+
+      [purpose='right-sidebar'] {
+        width: 100%;
+        // Note: we're specifying a minimum height for this element to be the height of the edit page button.
+        // Even if there are no subtopics on a documentation page, we can be sure that the edit page button will not overlap the pages content.
+        min-height: 30px;
+        margin-bottom: 32px;
+
+        [purpose='subtopics'] {
+          color: @core-fleet-black;
+
+          a {
+            color: @core-vibrant-blue;
+          }
+
+        }
+
+      }
+
+      [purpose='content'] {
+        width: 100%;
+        a {
+          word-wrap: break-word;
+        }
+        h1:first-of-type {
+          display: none;  // hides on mobile
+        }
+
+      }
+    }
+
+  }
+
+  @media (max-width: 768px) {
+    [purpose='docs-template'] {
+
+      [purpose='edit-button'] {
+        top: 0px;
+        right: 0px;
+      }
+    }
+
+  }
+
+  // for mobile
+  @media (max-width: 576px) {
+    [purpose='docs-template'] {
+      padding: 0px 24px;
+    }
+
+  }
+  @media(hover) {
+    [purpose='docs-template'] {
+      [purpose='edit-button'], [purpose='faq-edit-button'] {
+        opacity: 0;
+      }
+    }
+    [purpose='docs-template']:hover {
+      [purpose='edit-button'], [purpose='faq-edit-button'] {
+        opacity: 1;
+      }
+    }
+  }
+
+  @import 'code-blocks.less'; // styles for code blocks and hljs
+
+}

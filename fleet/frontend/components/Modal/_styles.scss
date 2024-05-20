@@ -1,0 +1,103 @@
+.modal {
+  &__background {
+    @include position(fixed, 0 0 0 0);
+    background-color: rgba($core-fleet-black, 0.4);
+    z-index: 101;
+    overflow: scroll;
+    display: flex;
+    justify-content: center;
+    animation: fade-in 150ms ease-out;
+  }
+
+  &__hidden {
+    visibility: hidden;
+    .fleet-checkbox__tick:after {
+      visibility: hidden;
+    }
+  }
+
+  &__content {
+    margin-top: $pad-large;
+    font-size: $x-small;
+
+    .input-field {
+      width: 100%;
+
+      &::placeholder {
+        font-size: $x-small;
+        font-style: italic;
+        line-height: 24px;
+      }
+    }
+
+    form .modal-cta-wrap,
+    .form .modal-cta-wrap {
+      // compensate for form gap to maintain consistent 32px spacing on top of modal ctas
+      margin-top: $pad-small;
+    }
+
+    .modal-cta-wrap {
+      align-self: flex-end;
+      display: flex;
+      flex-direction: row-reverse;
+      margin-top: $pad-xlarge;
+      gap: $pad-medium;
+    }
+  }
+
+  &__ex {
+    text-decoration: none;
+
+    &:hover {
+      .icon {
+        svg {
+          path {
+            stroke: $core-vibrant-blue;
+          }
+        }
+      }
+    }
+
+    .button {
+      padding: $pad-small;
+    }
+  }
+
+  &__header {
+    font-size: $large;
+    font-weight: $regular;
+    text-align: left;
+    padding-bottom: $pad-xsmall;
+    border-bottom: 1px solid $ui-fleet-black-10;
+    display: flex;
+    justify-content: space-between;
+
+    span {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+  }
+
+  &__modal_container {
+    @include position(absolute, 22px null null null);
+    box-sizing: border-box;
+    background-color: $core-white;
+    padding: $pad-xxlarge;
+    border-radius: 8px;
+    animation: scale-up 150ms ease-out;
+
+    &__medium {
+      width: 650px;
+    }
+    &__large {
+      width: 800px;
+    }
+    &__xlarge {
+      width: 850px;
+    }
+    &__auto {
+      width: auto;
+    }
+  }
+}

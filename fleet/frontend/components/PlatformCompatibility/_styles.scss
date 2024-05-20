@@ -1,0 +1,24 @@
+.platform-compatibility {
+  display: flex;
+  font-size: $x-small;
+  align-items: center;
+  b,
+  svg,
+  span {
+    display: flex;
+    align-items: center;
+  }
+
+  span {
+    padding-left: 12px;
+  }
+
+  .platform {
+    padding-left: 0px;
+
+    .icon {
+      padding-left: 12px;
+      padding-right: $pad-xsmall;
+    }
+  }
+}

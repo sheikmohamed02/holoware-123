@@ -1,0 +1,14 @@
+.platform-selector {
+  // override global form-field width: 100%
+  width: auto;
+
+  span {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .form-field__label--disabled {
+    color: $ui-fleet-black-50;
+  }
+}

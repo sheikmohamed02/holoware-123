@@ -1,0 +1,27 @@
+.premium-feature-message-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: $x-small;
+
+  .premium-feature-message {
+    display: flex;
+    gap: 4px;
+
+    p {
+      // need to set line-height to normal for the icons and text to be aligned
+      line-height: normal;
+      margin: 0;
+    }
+
+    .external-link-and-icon {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+
+      .custom-link {
+        font-weight: normal;
+      }
+    }
+  }
+}

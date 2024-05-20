@@ -1,0 +1,49 @@
+.hosts-filter-block {
+  &__labels-active-filter-wrap {
+    display: flex;
+    align-items: center;
+    margin-bottom: $pad-small;
+    gap: $pad-small; // between multiple filter pills
+
+    .form-field {
+      // negate global .form-field {width: 100%} for use of Dropdown
+      // and other "form-fields" in the filter block
+      width: initial;
+    }
+  }
+
+  // NOTE: Look more into this styling
+  &__os_settings-dropdown,
+  &__macsettings-dropdown,
+  &__sw-install-status-dropdown {
+    .Select-value {
+      display: flex;
+      align-items: center;
+      position: initial !important;
+      line-height: initial !important;
+
+      &::before {
+        position: relative;
+        content: url(../assets/images/icon-filter-v2-black-16x16@2x.png);
+        transform: scale(0.5);
+        top: 1px;
+      }
+    }
+
+    .Select-input {
+      display: none !important;
+    }
+
+    .Select {
+      box-sizing: initial;
+    }
+
+    .Select-control {
+      height: 36px;
+    }
+
+    .dropdown__select {
+      border: 1px solid #e2e4ea;
+    }
+  }
+}
